@@ -1,8 +1,6 @@
 package com.smartconcierge.routes
 
 import com.smartconcierge.dao.UserDao
-import com.smartconcierge.models.UserRole
-import com.smartconcierge.models.Users
 import com.smartconcierge.plugins.isValidEmail
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
@@ -46,26 +44,12 @@ fun Route.authRoutes() {
                 return@post
             }
 
-            val response = RegisterResponse(
-                id = user[Users.id].value,
-                email = user[Users.email],
-                name = user[Users.name],
-                role = user[Users.role]
-            )
-
-            call.respond(HttpStatusCode.Created, response)
+            call.respond(HttpStatusCode.Created, user)
 
         }
 
         get("/users") {
-            val users = UserDao.getAll().map {
-                RegisterResponse(
-                    id = it[Users.id].value,
-                    email = it[Users.email],
-                    name = it[Users.name],
-                    role = it[Users.role]
-                )
-            }
+            val users = UserDao.getAll()
 
             call.respond(HttpStatusCode.OK, users)
         }
@@ -77,7 +61,7 @@ data class RegisterResponse(
     val id: Int,
     val email: String,
     val name: String,
-    val role: UserRole
+    val role: String
 )
 
 @Serializable
