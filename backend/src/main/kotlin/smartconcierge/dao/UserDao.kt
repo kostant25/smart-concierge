@@ -7,6 +7,7 @@ import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.insertAndGetId
 import org.jetbrains.exposed.v1.jdbc.select
+import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 
 object UserDao {
@@ -22,13 +23,19 @@ object UserDao {
         }
     }
 
+    fun getAll(): List<ResultRow> {
+        return transaction {
+            Users.selectAll().toList()
+        }
+    }
+
     fun findByEmail(email: String): ResultRow? {
         return transaction {
             Users.select(columns = Users.columns).where { Users.email eq email }.singleOrNull()
         }
     }
 
-    fun findById(id: Int): ResultRow? {
+    fun findById(id: Int?): ResultRow? {
         return transaction {
             Users.select(columns = Users.columns).where { Users.id eq id }.singleOrNull()
         }
