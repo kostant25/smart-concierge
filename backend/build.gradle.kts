@@ -26,6 +26,7 @@ dependencies {
     implementation(libs.logback.classic)
     implementation(libs.postgresql)
     implementation("org.flywaydb:flyway-core:9.22.3")
+    implementation("org.jetbrains.exposed:exposed-kotlin-datetime:1.3.0")
 
     testImplementation(kotlin("test"))
     testImplementation(ktorLibs.server.testHost)
